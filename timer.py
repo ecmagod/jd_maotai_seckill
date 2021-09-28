@@ -33,6 +33,17 @@ class Timer(object):
         js = json.loads(ret)
         return int(js["serverTime"])
 
+    def jd_time_m(self):
+        """
+        从京东移动端服务器获取时间毫秒
+        :return:
+        """
+        url = 'https://api.m.jd.com/client.action?functionId=queryMaterialProducts&client=wh5'
+        ret = requests.get(url).text
+        js = json.loads(ret)
+        return int(js["currentTime2"])
+
+
     def local_time(self):
         """
         获取本地毫秒时间
@@ -45,7 +56,7 @@ class Timer(object):
         计算本地与京东服务器时间差
         :return:
         """
-        return self.local_time() - self.jd_time()
+        return self.local_time() - self.jd_time_m()
 
     def start(self):
         logger.info('正在等待到达设定时间:{}，检测本地时间与京东服务器时间误差为【{}】毫秒'.format(self.buy_time, self.diff_time))
